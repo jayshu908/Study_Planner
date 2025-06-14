@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Planner Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    
+    <!-- === Left Sidebar === -->
+    <aside class="sidebar">
+      <h2>📚 Planner</h2>
+      <nav>
+        <a href="#">🏠 Dashboard</a>
+        <a href="#">📅 Calendar</a>
+        <a href="#">📈 Progress</a>
+        <a href="#">🔔 Reminders</a>
+        <a href="#" onclick="openSettings()">⚙️ Settings</a>
+        <a href="#" onclick="logout()">🚪 Logout</a>
+      </nav>
+    </aside>
+
+    <!-- === Main Content === -->
+    <main class="main-content">
+      
+      <!-- Top Navbar -->
+      <div class="top-navbar">
+        <div class="welcome">
+          <h2>Welcome Back 👋</h2>
+          <p id="date"></p>
+        </div>
+        <div class="navbar-actions">
+          <input type="text" placeholder="Search tasks..." class="search-box">
+          <button onclick="openProfile()">👤</button>
+        </div>
+      </div>
+
+      <!-- Task Area -->
+      <div class="dashboard-body">
+        <div class="task-input">
+          <input type="text" id="taskInput" placeholder="Add a new task">
+          <button onclick="addTask()">Add</button>
+        </div>
+
+        <ul id="taskList"></ul>
+
+        <button class="clear-btn" onclick="clearTasks()">Clear All</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const taskList = document.getElementById("taskList");
+    const taskInput = document.getElementById("taskInput");
+    const dateDisplay = document.getElementById("date");
+
+    const today = new Date();
+    dateDisplay.innerText = today.toDateString();
+
+    function addTask() {
+      const task = taskInput.value.trim();
+      if (task === "") return;
+
+      const li = document.createElement("li");
+      li.textContent = task;
+
+      const removeBtn = document.createElement("span");
+      removeBtn.textContent = "✖";
+      removeBtn.className = "remove-btn";
+      removeBtn.onclick = () => li.remove();
+
+      li.appendChild(removeBtn);
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+    }
+
+    function clearTasks() {
+      taskList.innerHTML = "";
+    }
+
+    function openSettings() {
+      alert("Settings page coming soon!");
+    }
+
+    function openProfile() {
+      alert("Profile page coming soon!");
+    }
+
+    function logout() {
+      alert("You have been logged out.");
+      // window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
