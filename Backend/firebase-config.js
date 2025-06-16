@@ -1,8 +1,12 @@
 // backend/firebase-config.js
 
-// Paste your Firebase config here
+// Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+
+// Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyAeD7RtAFo6QtPnwlikiZqRv6EMsDMw8yE",
   authDomain: "yourapp.firebaseapp.com",
   projectId: "yourapp-id",
   storageBucket: "yourapp.appspot.com",
@@ -10,5 +14,11 @@ const firebaseConfig = {
   appId: "APP_ID"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase app
+const app = initializeApp(firebaseConfig);
+
+// Initialize and export Firebase Auth
+const auth = getAuth(app);
+
+// Export both app and auth in case needed
+export { app, auth };

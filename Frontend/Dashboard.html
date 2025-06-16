@@ -2,165 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Study Planner Dashboard</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard • Study Planner</title>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-
 <body>
-  <div class="app-layout">
-    
-    <!-- === Left Sidebar === -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2><i class="fas fa-book"></i> StudyPlanner</h2>
+  <!-- Inside dashboard.html -->
+<script type="module">
+  import { auth, onAuthStateChanged } from "./backend/firebase-config.js";
+
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      window.location.href = "login.html"; // Redirect if not logged in
+    }
+  });
+</script>
+
+<div class="app-layout">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title"><i class="fas fa-book"></i> StudyPlanner</h2>
+    <nav>
+      <a href="#" class="nav-link active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="#" class="nav-link" data-section="calendar"><i class="fas fa-calendar-alt"></i> Calendar</a>
+      <a href="#" class="nav-link" data-section="progress"><i class="fas fa-chart-line"></i> Progress</a>
+      <a href="#" class="nav-link" data-section="reminders"><i class="fas fa-bell"></i> Reminders</a>
+      <a href="#" class="nav-link" data-section="settings"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+    <a href="login.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main-content">
+
+    <!-- top‑navbar -->
+    <header class="top-navbar">
+      <div>
+        <h2>Welcome back, <span class="user-name">Student</span> 👋</h2>
+        <p id="todayDate"></p>
       </div>
-      <nav>
-        <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="#"><i class="fas fa-calendar-alt"></i> Calendar</a>
-        <a href="#"><i class="fas fa-chart-line"></i> Progress</a>
-        <a href="#"><i class="fas fa-bell"></i> Reminders</a>
-        <a href="#"><i class="fas fa-cog"></i> Settings</a>
-        <div class="sidebar-footer">
-          <a href="#" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-    </aside>
-
-    <!-- === Main Content === -->
-    <main class="main-content">
-      
-      <!-- Top Navbar -->
-      <div class="top-navbar">
-        <div class="welcome">
-          <h2>Welcome Back, <span class="user-name">Student</span> 👋</h2>
-          <p id="date"></p>
-        </div>
-        <div class="navbar-actions">
-          <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search tasks..." class="search-box">
-          </div>
-          <div class="profile-btn" onclick="openProfile()">
-            <div class="initials">SP</div>
-          </div>
-        </div>
+      <div class="navbar-actions">
+        <div class="search-box"><i class="fas fa-search"></i><input placeholder="Search…"></div>
+        <div class="profile-btn" onclick="openProfile()">SP</div>
       </div>
+    </header>
 
-      <!-- Dashboard Content -->
-      <div class="dashboard-content">
-        
-        <!-- Productivity Section -->
-        <div class="productivity-section">
-          <!-- Pomodoro Timer -->
-          <div class="pomodoro-card">
-            <div class="card-header">
-              <h3><i class="fas fa-clock"></i> Focus Timer</h3>
-              <div class="timer-cycle">
-                <span>Session: </span>
-                <span id="cycleCount">0</span>
-              </div>
-            </div>
-            <div class="timer-container">
-              <div class="timer-display" id="timer">25:00</div>
-              <div class="timer-modes">
-                <button class="mode-btn active" data-minutes="25">
-                  <i class="fas fa-graduation-cap"></i> Study
-                </button>
-                <button class="mode-btn" data-minutes="5">
-                  <i class="fas fa-coffee"></i> Short Break
-                </button>
-                <button class="mode-btn" data-minutes="15">
-                  <i class="fas fa-couch"></i> Long Break
-                </button>
-              </div>
-              <div class="timer-controls">
-                <button id="startTimer" class="timer-btn primary">
-                  <i class="fas fa-play"></i> Start
-                </button>
-                <button id="pauseTimer" class="timer-btn secondary">
-                  <i class="fas fa-pause"></i> Pause
-                </button>
-                <button id="resetTimer" class="timer-btn danger">
-                  <i class="fas fa-redo"></i> Reset
-                </button>
-              </div>
-            </div>
-          </div>
+    <!-- ===== dashboard ===== -->
+    <section class="dashboard-content" data-section-block="dashboard">
+      <!-- Weekly timetable -->
+      <h3><i class="fas fa-table"></i> Weekly Timetable</h3>
+      <table class="timetable"><thead></thead><tbody id="timetableBody"></tbody></table>
 
-          <!-- Stats Card -->
-          <div class="stats-card">
-            <h3><i class="fas fa-chart-pie"></i> Today's Stats</h3>
-            <div class="stats-grid">
-              <div class="stat-item">
-                <div class="stat-value" id="tasksCompleted">0</div>
-                <div class="stat-label">Tasks Done</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-value" id="focusTime">0h 0m</div>
-                <div class="stat-label">Focus Time</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-value" id="productivityScore">0%</div>
-                <div class="stat-label">Productivity</div>
-              </div>
-            </div>
-          </div>
+      <!-- Task manager -->
+      <div class="tasks">
+        <h3><i class="fas fa-tasks"></i> My Tasks</h3>
+        <div class="task-input">
+          <input id="taskInput" placeholder="Add a new task…" />
+          <button class="btn primary" onclick="addTask()"><i class="fas fa-plus"></i></button>
         </div>
-
-        <!-- Tasks Section -->
-        <div class="tasks-section">
-          <div class="tasks-header">
-            <h3><i class="fas fa-tasks"></i> My Tasks</h3>
-            <div class="task-actions">
-              <div class="task-input">
-                <input type="text" id="taskInput" placeholder="Add a new task...">
-                <button class="add-btn" onclick="addTask()">
-                  <i class="fas fa-plus"></i> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="tasks-container">
-            <ul id="taskList" class="task-list">
-              <!-- Tasks will be added here dynamically -->
-            </ul>
-            
-            <div class="tasks-footer">
-              <div class="tasks-summary">
-                <span id="totalTasks">0</span> tasks (<span id="completedTasks">0</span> completed)
-              </div>
-              <button class="clear-btn" onclick="clearTasks()">
-                <i class="fas fa-trash-alt"></i> Clear All
-              </button>
-            </div>
-          </div>
-        </div>
+        <ul id="taskList"></ul>
+        <p id="taskSummary">0 tasks (0 completed)</p>
+        <button class="btn danger" onclick="clearTasks()">Clear All</button>
       </div>
-    </main>
+    </section>
+
+    <!-- ===== calendar ===== -->
+    <section class="calendar-section hidden" data-section-block="calendar">
+      <h3><i class="fas fa-calendar-alt"></i> Calendar</h3>
+      <input type="date" id="calDate">
+      <input type="text" id="calText" placeholder="Add event/reminder">
+      <button class="btn primary" onclick="addCalendarEvent()">Add</button>
+      <ul id="calendarEventList"></ul>
+    </section>
+
+    <!-- ===== progress ===== -->
+    <section class="progress-section hidden" data-section-block="progress">
+      <h3><i class="fas fa-chart-line"></i> Progress</h3>
+      <p>Completed‑task ratio today:</p>
+      <div class="progress-bar"><div id="progressFill"></div></div>
+      <p id="progressText">0 %</p>
+    </section>
+
+    <!-- ===== reminders ===== -->
+    <section class="reminders-section hidden" data-section-block="reminders">
+      <h3><i class="fas fa-bell"></i> Reminders</h3>
+      <input id="reminderInput" placeholder="Add a reminder">
+      <button class="btn primary" onclick="addReminder()">Add</button>
+      <ul id="reminderList"></ul>
+    </section>
+
+    <!-- ===== settings ===== -->
+    <section class="settings-section hidden" data-section-block="settings">
+      <h3><i class="fas fa-cog"></i> Settings</h3>
+      <label><input type="checkbox" id="darkToggle"> Dark mode (demo)</label>
+    </section>
+
+  </main>
+</div>
+
+<!-- = mini focus timer widget = -->
+<div class="focus-widget">
+  <span id="fwTime">25:00</span>
+  <button id="fwStart"><i class="fas fa-play"></i></button>
+</div>
+
+<!-- = alert modal = -->
+<div id="alertModal" class="modal hidden">
+  <div class="modal-box">
+    <h4 id="alertTitle"></h4>
+    <p id="alertMsg"></p>
+    <button class="btn primary" onclick="closeAlert()">OK</button>
   </div>
+</div>
 
-  <!-- Custom Alert Modal -->
-  <div id="alertModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="alertTitle">Alert</h3>
-        <span class="close-modal">&times;</span>
-      </div>
-      <div class="modal-body">
-        <p id="alertMessage"></p>
-      </div>
-      <div class="modal-footer">
-        <button id="confirmBtn" class="modal-btn primary">OK</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Confetti Effect Container -->
-  <canvas id="confetti-canvas"></canvas>
-
-  <script src="script.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>
