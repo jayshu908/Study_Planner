@@ -126,7 +126,7 @@ body, html {
 
 .logout-btn {
   margin-top: auto;
-  background: var(--danger-color);
+  /* background: var(--danger-color); */
   color: white;
   padding: 0.5rem 1rem;
   text-align: center;
