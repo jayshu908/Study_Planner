@@ -5,14 +5,23 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
 // Your Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// backend/firebase-config.js
+
+require('dotenv').config(); // Load .env
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAeD7RtAFo6QtPnwlikiZqRv6EMsDMw8yE",
-  authDomain: "yourapp.firebaseapp.com",
-  projectId: "yourapp-id",
-  storageBucket: "yourapp.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
+
+module.exports = firebaseConfig;
+
 
 // Initialize Firebase app
 const app = initializeApp(firebaseConfig);
